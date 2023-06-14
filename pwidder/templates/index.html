@@ -1,0 +1,330 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/main.css">
+    <script type="text/javascript"src="../static/js/jquery-3.6.4.js"></script>
+    <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+    <script type="text/javascript"src="../static/js/main.js"></script>
+  
+    
+    <title> {{ title }} </title>
+</head>
+<body>
+    <style>
+        html {
+    color: #000000;
+    background-color: #ffffff;
+  }
+  
+  body {
+    color: #000000;
+    background-color: #ffffff;
+    min-height: 100%;
+    font-family: "Lucida Grande", sans-serif;
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 3s;
+    animation-name: animatebottom;
+    animation-duration: 3s;
+  }
+  
+  /* @-webkit-keyframes animatebottom {
+    from {
+      bottom: -100px;
+      opacity: 0;
+    }
+    to {
+      bottom: 0px;
+      opacity: 1;
+    }
+  }
+  
+  @keyframes animatebottom {
+    from {
+      bottom: -100px;
+      opacity: 0;
+    }
+    to {
+      bottom: 0;
+      opacity: 1;
+    }
+  }
+   */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #444444;
+  }
+  
+  ul {
+    margin: 0;
+  }
+  
+  
+  .dark-mode {
+    color: #ffffff;
+    background-color: #bdbdbd;
+  }
+  
+  .bg-steel {
+    color: #ffffff;
+    background-color: #e0e0e0;
+  }
+  
+  .navbar-nav .nav-link {
+    font-weight: bold;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #ddd3d3;
+  }
+  
+  .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
+  
+  .content-section {
+    padding: 10px 20px;
+    border: 2px dotted #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+  
+  .article-title {
+    color: #444444;
+  }
+  
+  a {
+    color: #3f497d;
+    text-decoration: dotted;
+  }
+  
+  .article-content {
+    font-style: oblique;
+  }
+  
+  
+  .article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+  }
+  
+  .article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3;
+  }
+  
+  .article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  
+  .account-img {
+    height: 60px;
+    width: 60px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .account-heading {
+    font-size: 2.5rem;
+  }
+  
+  .spinner {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url("../images/spinner.gif") no-repeat scroll center #fff;
+  }
+
+
+
+  div.container {
+    text-align: center;
+    padding-bottom: 4em;
+}
+
+div.container button {
+    padding: 15px 25px;
+	background: #7c54ba;
+	color: #fff;
+	border: 2px solid #eee;
+	border-radius: 20px;
+	box-shadow: 5px 5px 5px #eee;
+    cursor: pointer;
+}
+
+
+ul.myUL {
+  display: inline-block;
+  text-align: center;
+}
+
+img{
+    border-radius: 50%;
+    /* border: 2px solid rgb(146, 143, 143); */
+}
+
+
+
+/* button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  opacity: 0.9;
+} */
+
+button:hover {
+  opacity:1;
+}
+
+/* Extra styles for the cancel button */
+.cancelbtn {
+  padding: 14px 20px;
+  background-color: #f44336;
+}
+
+/* Float cancel and signup buttons and add an equal width */
+.cancelbtn, .signupbtn {
+  float: left;
+  width: 50%;
+}
+
+/* Add padding to container elements */
+.container {
+  padding: 16px;
+}
+
+/* Clear floats */
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+dialog {
+    border: solid rgb(120, 105, 105) 2px;
+    border-radius: 30px;
+    background-color: #afa3a3;
+    width: 1000px;
+    height: 350px; 
+    color:#000000;
+    padding: 0;
+
+
+}
+
+
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h1 style="text-align: center; padding-top: 1em;" > Pwitter </h1>
+    <div class="container">
+          <h3 style="padding-top: 2px; padding-bottom: 10px"> <a href="/signup"> Signup</a> <a style="padding-left: 3em"href="/signin"> Signin </a> </h3>
+          <button class="button"id="open"> Create a New Pweet</button>
+            <dialog id="dialog_1" >
+                <h1> You can create a pweet here </h1>
+                <form style=" padding-top: 2em" action="/" method="POST" >
+                    {% csrf_token %}
+                    {{ form }}
+
+                    <!-- <input type="text" name="username" placeholder="Username" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 2px solid #000000 !important;">
+                    <input type="text" name="content" placeholder="Content" class="bg-gray-200 mb-2 shadow-none dark:bg-gray-800" style="border: 2px solid #000000 !important;"> -->
+                    <div class="clearfix" style=" padding-top: 2em">
+                        <button type="button" class="cancelbtn">Cancel</button>
+                        <button type="submit" class="signupbtn"> Create a Pweet </button>
+                      </div>
+    
+                </form>
+                <div style="padding-top: 5em">
+                <button id="close" > Close</button>
+                </div>
+            </dialog>
+
+      </div>
+    {% for pweet in pweets %}
+    <article class="media content-section">
+        <img
+        class="image"
+        width="30"
+        height="30"
+        src="{{ pweet.profile.profile_image.url }}"
+        />
+        <a class="article-content" style=" padding-right: 2em;  text-align: justify;"class="mr-2" href="/profile/{{ pweet.user.id }}">
+            {{ pweet.user }}
+          </a>
+          <small class="article-content" class="text-muted">
+            {{ pweet.created_at | date:"H:i - d M y"}}
+          </small>
+        <div class="media-body">
+          <div class="article-metadata">
+
+
+
+          </div>
+          <p style="text-align: justify; " class="article-content" >
+            {{ pweet.content }}
+          </p>
+        </div>
+      </article>
+        <div class="flex space-x-4 lg:font-bold">
+            <a href="/" class="flex items-center space-x-2">
+                <div class="p-2 rounded-full text-black">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="like" style=" padding-left: 1em; padding-top: 0.000001px" >
+                        
+                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                    
+                    </svg>
+                    
+                        {% if pweet.no_of_likes == 0 %}
+                        <p style="padding: 10px 20px; padding-bottom: 3em">No likes</p>
+                        {% elif pweet.no_of_likes == 1 %}
+                        <p style="padding: 10px 20px; padding-bottom: 3em">Liked by {{pweet.no_of_likes}} person</p>
+                        {% else %}
+                        <p style="padding: 10px 20px; padding-bottom: 3em">Liked by {{pweet.no_of_likes}} people</p>
+                        {% endif %}
+                </div>
+            </div>
+            
+
+    {% endfor %}
+
+
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/main.css">
+    <title> {{ title }} </title>
+</head>
+<body>
+    <style>
+        html {
+    color: #000000;
+    background-color: #ffffff;
+  }
+  
+  body {
+    color: #000000;
+    background-color: #ffffff;
+    min-height: 100%;
+    font-family: "Lucida Grande", sans-serif;
+    position: relative;
+    -webkit-animation-name: animatebottom;
+    -webkit-animation-duration: 3s;
+    animation-name: animatebottom;
+    animation-duration: 3s;
+  }
+  
+  /* @-webkit-keyframes animatebottom {
+    from {
+      bottom: -100px;
+      opacity: 0;
+    }
+    to {
+      bottom: 0px;
+      opacity: 1;
+    }
+  }
+  
+  @keyframes animatebottom {
+    from {
+      bottom: -100px;
+      opacity: 0;
+    }
+    to {
+      bottom: 0;
+      opacity: 1;
+    }
+  }
+   */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #444444;
+  }
+  
+  ul {
+    margin: 0;
+  }
+  
+  
+  .dark-mode {
+    color: #ffffff;
+    background-color: #bdbdbd;
+  }
+  
+  .bg-steel {
+    color: #ffffff;
+    background-color: #e0e0e0;
+  }
+  
+  .navbar-nav .nav-link {
+    font-weight: bold;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #ddd3d3;
+  }
+  
+  .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
+  
+  .content-section {
+    padding: 10px 20px;
+    border: 2px dotted #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+  
+  .article-title {
+    color: #444444;
+  }
+  
+  a {
+    color: #001ca8;
+    text-decoration: none;
+  }
+  
+  .article-content {
+    text-align: justify;
+    font-style: oblique;
+  }
+  
+  
+  .article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+    border-radius: 0.5em
+  }
+  
+  .article-metadata {
+    padding-bottom: 1px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #e3e3e3;
+  }
+  
+  .article-metadata a:hover {
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  
+  .account-img {
+    height: 60px;
+    width: 60px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .account-heading {
+    font-size: 2.5rem;
+  }
+  
+  .spinner {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url("../images/spinner.gif") no-repeat scroll center #fff;
+  }
+  .bio {
+    padding: 10px 20px;
+    border: 2px dotted #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+    font-style: oblique;
+    
+  }
+  img{
+    height: 80px;
+    width: 80px;
+    border-radius: 50%;
+    /* border: 0.005px solid rgb(146, 143, 143); */
+}
+
+section img{
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+}
+    </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <h1 style="text-align: center; padding-top: 1em; "> Pwitter </h1>
+    <img class="image"  style="padding: 10px 20px;" src="{{ user_profile.profile_image.url }}">
+    <a style=" padding-right: 2em; font-size: 1.5em; padding: 10px 10px  "class="mr-2" href="/profile/{{ user_object.id }}">
+        {{ user_profile.user }}
+    </a>
+      
+      
+    <div class="bio">
+        BIO: {{user_profile.bio}}
+    </div>
+    
+    
+    <section>
+        <h1 style="text-align: center; padding-top: 2em; padding-bottom: 1.5em"> All Pweets </h1>	
+        {% for pweet in user_pweets %}
+        <article class="media content-section">
+            <img
+            class="image"
+            width="80"
+            height="80"
+            src="{{ pweet.profile.profile_image.url }}"
+            />
+            <a class="article-content" style=" padding-right: 2em;  text-align: justify;"class="mr-2" href="/profile/{{ pweet.user.id }}">
+                {{ pweet.user }}
+              </a>
+              <small class="article-content" class="text-muted">
+                {{ pweet.created_at | date:"H:i - d M y"}}
+              </small>
+            <div class="media-body">
+              <div class="article-metadata">
+    
+    
+    
+              </div>
+              <p style="text-align: justify;" class="article-content">
+                {{ pweet.content }}
+              </p>
+            </div>
+          </article>
+            <div class="flex space-x-4 lg:font-bold">
+                <a href="/profile/{{ pweet.user.id }}" class="flex items-center space-x-2">
+                    <div class="p-2 rounded-full text-black">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="25" height="25" class="like" style=" padding-left: 1em" >
+                            
+                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                            
+                        </svg>
+                        
+                        {% if pweet.no_of_likes == 0 %}
+                        <p style="padding: 10px 20px; padding-bottom: 3em">No likes</p>
+                        {% elif pweet.no_of_likes == 1 %}
+                        <p style="padding: 10px 20px; padding-bottom: 3em">Liked by {{pweet.no_of_likes}} person</p>
+                        {% else %}
+                        <p style="padding: 10px 20px; padding-bottom: 3em">Liked by {{pweet.no_of_likes}} people</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+    
+        {% endfor %}					
+	</section>
+    
+
+
+</body>
+</html>
