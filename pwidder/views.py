@@ -26,7 +26,7 @@ from django.urls import reverse
 
 
 # Create your views here.
-@login_required
+
 @csrf_exempt
 def index(request):
     user = User.objects.get()
