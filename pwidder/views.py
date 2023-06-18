@@ -29,10 +29,7 @@ from django.urls import reverse
 
 @csrf_exempt
 def index(request):
-    user = User.objects.get()
-    if user is None:
-        return redirect('/signup')
-    else: 
+
         if request.method == 'POST':
 
             form = PweetCreate(request.POST)
