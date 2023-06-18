@@ -20,6 +20,8 @@ from django.core.files import File
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 import json
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.urls import reverse
 
 
 
@@ -78,6 +80,7 @@ def index(request):
 
 
 def profile(request, pk):
+
     user_object = User.objects.get(id=pk)
     user_profile = Profile.objects.get(user=user_object)
     user_pweets = Pweet.objects.filter(user=user_object)
@@ -87,101 +90,31 @@ def profile(request, pk):
         'user_profile': user_profile,
         'user_pweets': user_pweets,
     }
+
+
+
+
+
     return render(request, 'profile.html', context)
 
 
 
 
 
+@csrf_exempt
+def delete(request,pweet_id):
+    if request.method == "POST":
+        pweet = Pweet.objects.get(id=pweet_id)
+        pweet.delete()
+        return HttpResponseRedirect(reverse("profile"))
+    else:
+        return JsonResponse({
+            "error": "GET or PUT request required."
+        }, status=400)
 
 
 
 
-
-# class RegistrationView(CreateView):
-#     form_class = PweetCreate
-#     template_name = 'registration.html'
-#     success_url = reverse_lazy('login')
-
-
-# def create_pweet(request):
-#     if request.method == 'POST':
-#         username = request.POST['username']
-#         content = request.POST['content']
-
-
-#         if User.objects.filter(username=username).exists():
-#             new_profile = Pweet.objects.create(username=username, content=content)
-#             new_profile.save()
-#             return redirect('/')
-#         else:   
-#             messages.info(request, 'This username is not exist')
-#             return redirect('/signup')
-        
-#     else:
-#         context = {'title': 'Create PRof'}
-#         return render(request, 'index.html', context)
-
-
-
-
-# @login_required
-# @csrf_exempt
-# def like(request):
-#     if request.method == "PUT":
-#         data = json.loads(request.body)
-#         pweet_id = data.get("pweet_id")
-#         like = data.get("like")
-#         if like:
-#             pweet = Pweet.objects.get(id=pweet_id)
-#             user=User.objects.get(id=request.user.id)
-#             if user in pweet.likes.all():
-#                 l = LikedPweet.objects.get(pweet_owner=pweet.owner,pweet=pweet,liker=user)
-#                 l.delete()
-#                 pweet.likes.remove(user)
-#                 pweet.save()
-#                 print(pweet.likes.count())
-#                 return JsonResponse({"like":"etshal","likes_count":str(pweet.likes.count())},status=200)
-#             else:
-#                 pweet.likes.add(user)
-#                 l = LikedPweet(post_owner=pweet.owner,post=pweet,liker=user)
-#                 l.save()
-#                 print(pweet.likes.count())
-#                 pweet.save()
-#                 return JsonResponse({"like":"like et7aet","likes_count":str(pweet.likes.count())},status=200)
-
-#     else:
-#         return JsonResponse({"error":"Your request Falied"})
-
-
-
-
-# class PostView(TemplateView):
-#     template_name = 'index.html'
-
-#     def like_post(self, request):
-#                 data = request.POST
-#                 user = request.user
-#                 pweet = Pweet.objects.get(id=self.kwargs['pk'])
-#                 if 'like' in data.keys():
-#                     like = LikePweet.objects.filter(pweet=pweet)
-#                     is_like = 0
-#                     for i in like:
-#                         if i.user == user:
-#                             i.delete()
-#                             break
-#                     else:
-#                         is_like = 1
-#                         l = LikePweet(pweet=pweet, user=user)
-#                         l.save()
-#                     return JsonResponse({'like_amount': len(LikePweet.objects.filter(pweet=pweet)), 'isLike': is_like}, safe=False)
-#                 if 'is_like' in data.keys():
-#                     like = LikePweet.objects.filter(pweet=pweet)
-#                     for i in like:
-#                         if i.user == user:
-#                             return JsonResponse({'like': 1}, safe=False)
-#                     else:
-#                         return JsonResponse({'like': 0}, safe=False)
 
 
 
