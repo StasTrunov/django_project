@@ -27,8 +27,8 @@ class Comment(models.Model):
     pweet = models.ForeignKey(Pweet, on_delete=models.CASCADE)
 
 
-class LikePweet(models.Model):
-    pweet_id = models.IntegerField()
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+class LikedPweet(models.Model):
+    post_owner = models.ForeignKey(User,related_name="pweet_owner" ,on_delete=models.CASCADE)
+    post = models.ForeignKey(Pweet,related_name="liked_pweet",on_delete=models.CASCADE)
+    liker = models.ForeignKey(User,related_name="liked",on_delete=models.CASCADE)
 

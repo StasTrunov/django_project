@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Pweet, Profile, LikePweet, Comment
+from .models import Pweet, Profile, LikedPweet, Comment
 from django.contrib.auth.models import User
 from .forms import PweetCreate, ImageCreate
 from django.shortcuts import render, redirect
@@ -17,11 +17,15 @@ from django.template.loader import render_to_string
 from django.http import JsonResponse
 from pathlib import Path
 from django.core.files import File
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+import json
 
 
 
 # Create your views here.
-
+@login_required
+@csrf_exempt
 def index(request):
 
     if request.method == 'POST':
@@ -41,6 +45,32 @@ def index(request):
         pweets = Pweet.objects.all()
         context = {'pweets': pweets, 'title': 'Home', 'form': form}
         return render(request, 'index.html', context)
+    
+
+    if request.method == "PUT":
+        data = json.loads(request.body)
+        pweet_id = data.get("pweet_id")
+        like = data.get("like")
+        if like:
+            pweet = Pweet.objects.get(id=pweet_id)
+            user=User.objects.get(id=request.user.id)
+            if user in pweet.likes.all():
+                l = LikedPweet.objects.get(pweet_owner=pweet.owner,pweet=pweet,liker=user)
+                l.delete()
+                pweet.likes.remove(user)
+                pweet.save()
+                print(pweet.likes.count())
+                return JsonResponse({"like":"etshal","likes_count":str(pweet.likes.count())},status=200)
+            else:
+                pweet.likes.add(user)
+                l = LikedPweet(post_owner=pweet.owner,post=pweet,liker=user)
+                l.save()
+                print(pweet.likes.count())
+                pweet.save()
+                return JsonResponse({"like":"like et7aet","likes_count":str(pweet.likes.count())},status=200)
+
+    else:
+        return JsonResponse({"error":"Your request Falied"})
 
 
 
@@ -92,25 +122,34 @@ def profile(request, pk):
 
 
 
-def like_post(request):
-    user = request.user
-    pweet_id = request.GET.get('pweet_id')
+# @login_required
+# @csrf_exempt
+# def like(request):
+#     if request.method == "PUT":
+#         data = json.loads(request.body)
+#         pweet_id = data.get("pweet_id")
+#         like = data.get("like")
+#         if like:
+#             pweet = Pweet.objects.get(id=pweet_id)
+#             user=User.objects.get(id=request.user.id)
+#             if user in pweet.likes.all():
+#                 l = LikedPweet.objects.get(pweet_owner=pweet.owner,pweet=pweet,liker=user)
+#                 l.delete()
+#                 pweet.likes.remove(user)
+#                 pweet.save()
+#                 print(pweet.likes.count())
+#                 return JsonResponse({"like":"etshal","likes_count":str(pweet.likes.count())},status=200)
+#             else:
+#                 pweet.likes.add(user)
+#                 l = LikedPweet(post_owner=pweet.owner,post=pweet,liker=user)
+#                 l.save()
+#                 print(pweet.likes.count())
+#                 pweet.save()
+#                 return JsonResponse({"like":"like et7aet","likes_count":str(pweet.likes.count())},status=200)
 
-    pweet = Pweet.objects.get(id=pweet_id )
+#     else:
+#         return JsonResponse({"error":"Your request Falied"})
 
-    like_filter = LikePweet.objects.filter(pweet_id=pweet_id , user=user).first()
-
-    if like_filter == None:
-        new_like = LikePweet.objects.create(pweet_id=pweet_id , user=user)
-        new_like.save()
-        pweet.no_of_likes = pweet.no_of_likes+1
-        pweet.save()
-        return redirect('/')
-    else:
-        like_filter.delete()
-        pweet.no_of_likes = pweet.no_of_likes-1
-        pweet.save()
-        return redirect('/')
 
 
 
