@@ -8,7 +8,7 @@ import uuid
 class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     bio = models.CharField(max_length=1000)
-    profile_image = models.ImageField(upload_to='static/media/', default='static/media/blank-profile-picture.png')
+    profile_image = models.ImageField(upload_to='static/media/profile_images/', default='static/media/blank-profile-picture.png')
     id_user = models.IntegerField()
 
 
