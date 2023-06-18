@@ -27,50 +27,53 @@ import json
 @login_required
 @csrf_exempt
 def index(request):
+    user = User.objects.get()
+    if user is None:
+        return redirect('/signup')
+    else: 
+        if request.method == 'POST':
 
-    if request.method == 'POST':
+            form = PweetCreate(request.POST)
 
-        form = PweetCreate(request.POST)
+            if form.is_valid():
+                content = form.cleaned_data['content']
+                username = request.user
+                profile = Profile.objects.get(user=username)
+                new_pweet = Pweet(user=username, content=content, profile=profile)
+                new_pweet.save()
+                return redirect('/')
+                    
+        else:
+            form = PweetCreate()
+            pweets = Pweet.objects.all()
+            context = {'pweets': pweets, 'title': 'Home', 'form': form}
+            return render(request, 'index.html', context)
+        
 
-        if form.is_valid():
-            content = form.cleaned_data['content']
-            username = request.user
-            profile = Profile.objects.get(user=username)
-            new_pweet = Pweet(user=username, content=content, profile=profile)
-            new_pweet.save()
-            return redirect('/')
-                
-    else:
-        form = PweetCreate()
-        pweets = Pweet.objects.all()
-        context = {'pweets': pweets, 'title': 'Home', 'form': form}
-        return render(request, 'index.html', context)
-    
+        if request.method == "PUT":
+            data = json.loads(request.body)
+            pweet_id = data.get("pweet_id")
+            like = data.get("like")
+            if like:
+                pweet = Pweet.objects.get(id=pweet_id)
+                user=User.objects.get(id=request.user.id)
+                if user in pweet.likes.all():
+                    l = LikedPweet.objects.get(pweet_owner=pweet.owner,pweet=pweet,liker=user)
+                    l.delete()
+                    pweet.likes.remove(user)
+                    pweet.save()
+                    print(pweet.likes.count())
+                    return JsonResponse({"like":"etshal","likes_count":str(pweet.likes.count())},status=200)
+                else:
+                    pweet.likes.add(user)
+                    l = LikedPweet(post_owner=pweet.owner,post=pweet,liker=user)
+                    l.save()
+                    print(pweet.likes.count())
+                    pweet.save()
+                    return JsonResponse({"like":"like et7aet","likes_count":str(pweet.likes.count())},status=200)
 
-    if request.method == "PUT":
-        data = json.loads(request.body)
-        pweet_id = data.get("pweet_id")
-        like = data.get("like")
-        if like:
-            pweet = Pweet.objects.get(id=pweet_id)
-            user=User.objects.get(id=request.user.id)
-            if user in pweet.likes.all():
-                l = LikedPweet.objects.get(pweet_owner=pweet.owner,pweet=pweet,liker=user)
-                l.delete()
-                pweet.likes.remove(user)
-                pweet.save()
-                print(pweet.likes.count())
-                return JsonResponse({"like":"etshal","likes_count":str(pweet.likes.count())},status=200)
-            else:
-                pweet.likes.add(user)
-                l = LikedPweet(post_owner=pweet.owner,post=pweet,liker=user)
-                l.save()
-                print(pweet.likes.count())
-                pweet.save()
-                return JsonResponse({"like":"like et7aet","likes_count":str(pweet.likes.count())},status=200)
-
-    else:
-        return JsonResponse({"error":"Your request Falied"})
+        else:
+            return JsonResponse({"error":"Your request Falied"})
 
 
 
