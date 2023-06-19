@@ -100,7 +100,7 @@ def profile(request, pk):
 
 @csrf_exempt
 def delete(request,pweet_id):
-    if request.method == "POST":
+    if request.method == "DELETE":
         pweet = Pweet.objects.get(id=pweet_id)
         pweet.delete()
         return HttpResponseRedirect(reverse("profile"))
